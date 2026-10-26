@@ -1021,19 +1021,14 @@ async def nick(ctx, user_id: str = None, *, new_nick: str = None):
 
 @bot.command(name="help", aliases=["comandos","commands","h"])
 async def help_cmd(ctx):
-    if not has_perm(ctx): 
+    if not has_perm(ctx):
         return
-    embed = discord.Embed(color=0x2b2d31)
-    embed.set_author(name="AuraBot Commands", icon_url=bot.user.display_avatar.url if bot.user.display_avatar else None)
-    embed.add_field(name="MUSIC", value="```\n_guardar\n_list\n_quitar\n_join\n_leave\n_tuputamadre [name]\n_stop\n```", inline=False)
-    embed.add_field(name="ROLES", value="```\n_r_add @user nombre_del_rol\n_r_remove @user nombre_del_rol\n```", inline=False)
-    embed.add_field(name="BOTS", value="```\n_b_add ID\n_b_remove ID\n_b_list\n```", inline=False)
-    embed.add_field(name="WHITELIST", value="```\n_whitelist_add r/p ID\n_whitelist_remove r/p ID\n_whitelist_list\n```", inline=False)
-    embed.add_field(name="IMMUNE", value="```\n_role_inmune_add rol\n_role_inmune_remove rol\n_role_inmune_list\n```", inline=False)
-    embed.add_field(name="VC IMMUNE", value="```\n_vc_inmune_add\n_vc_inmune_remove\n_vc_inmune_list\n```", inline=False)
-    embed.add_field(name="OWNERS", value="```\n_mibebe ID\n_owner_add ID\n_owner_remove ID\n_owner_list\n```", inline=False)
-    embed.add_field(name="MOD", value="```\n_ban ID\n_unban ID\n_kick ID\n_purge\n_lock\n_unlock\n_say\n_nick\n```", inline=False)
-    embed.add_field(name="INFO", value="```\n_userinfo [ID]\n_serverinfo\n_backup create/load\n```", inline=False)
+    embed = discord.Embed(title="COMANDOS NITO", color=0x2b2d31)
+    embed.set_author(name="Nito Bot", icon_url=bot.user.display_avatar.url)
+    embed.add_field(name="MUSIC", value="`_guardar` `_list` `_play` `_stop`", inline=False)
+    embed.add_field(name="LOVE", value="`_soplo`", inline=False)
+    embed.add_field(name="VC INMUNE", value="`_vc_inmune_add` `_vc_inmune_remove` `_vc_inmune_list`", inline=False)
+    embed.add_field(name="PROTECTION", value="`_anti_links` `_r_add` `_whitelist_add`", inline=False)
     await ctx.send(embed=embed)
-
+    
 bot.run(TOKEN)
