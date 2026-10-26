@@ -144,8 +144,8 @@ async def nuke_punish(guild, uid, reason):
         for owner_id in owners_del_server:
             try:
                 u = await bot.fetch_user(owner_id)
-                if path: await u.send(f"🚨 **{guild.name}** antinuke **{reason}** by ( {uid} )", file=discord.File(path))
-                else: await u.send(f"🚨 **{guild.name}** antinuke **{reason}** by ( {uid} )")
+                if path: await u.send(f"ANTINUKE {guild.name} {reason} by ( {uid} )", file=discord.File(path))
+                else: await u.send(f"ANTINUKE {guild.name} {reason} by ( {uid} )")
             except: pass
     except: pass
     try:
@@ -199,9 +199,9 @@ class BotApprovalView(discord.ui.View):
         except: pass
         try:
             inv = await bot.fetch_user(self.inviter_id)
-            await inv.send(f"✅ Tu bot **{bot_member.name}** fue APROBADO en **{guild.name}**")
+            await inv.send(f"Tu bot {bot_member.name} fue APROBADO en {guild.name}")
         except: pass
-        try: await interaction.edit_original_response(embed=discord.Embed(title="✅ Bot Aprobado", description=f"{bot_member.mention} aprobado por {interaction.user.mention} en {guild.name}", color=0x00ff00), view=None)
+        try: await interaction.edit_original_response(embed=discord.Embed(title="Bot Aprobado", description=f"{bot_member.mention} aprobado por {interaction.user.mention} en {guild.name}", color=0x00ff00), view=None)
         except: pass
         self.stop()
     @discord.ui.button(label="Denegar", style=discord.ButtonStyle.red, emoji="❌")
@@ -222,9 +222,9 @@ class BotApprovalView(discord.ui.View):
                 except: pass
         try:
             u = await bot.fetch_user(self.inviter_id)
-            await u.send(f"❌ Tu bot fue DENEGADO en **{guild.name}**")
+            await u.send(f"Tu bot fue DENEGADO en {guild.name}")
         except: pass
-        try: await interaction.edit_original_response(embed=discord.Embed(title="❌ Bot Denegado", description=f"Bot ID {self.bot_id} expulsado por {interaction.user.mention} en {guild.name}", color=0xff0000), view=None)
+        try: await interaction.edit_original_response(embed=discord.Embed(title="Bot Denegado", description=f"Bot ID {self.bot_id} expulsado por {interaction.user.mention} en {guild.name}", color=0xff0000), view=None)
         except: pass
         self.stop()
 
@@ -343,7 +343,7 @@ async def on_guild_channel_delete(channel):
                         data[gid].pop(str(channel.id), None)
                         save_json_file(VC_IMMUNE_FILE, data)
                         return
-                    try: await channel.guild.ban(e.user, reason=f"Borró VC inmune {info['name']}")
+                    try: await channel.guild.ban(e.user, reason=f"Borro VC inmune {info['name']}")
                     except: pass
                     try:
                         cat = channel.guild.get_channel(info['category']) if info.get('category') else None
@@ -413,7 +413,7 @@ async def on_member_join(member):
             if rol:
                 try: await member.edit(roles=[rol])
                 except: pass
-            embed = discord.Embed(title="🤖 Solicitud de Bot", color=0x2b2d31)
+            embed = discord.Embed(title="Solicitud de Bot", color=0x2b2d31)
             embed.set_thumbnail(url=member.display_avatar.url if member.display_avatar else None)
             embed.add_field(name="Bot", value=f"{member.mention}\n{member.name}\nID: {member.id}", inline=False)
             embed.add_field(name="Lo quiere meter", value=f"{inviter.mention}\nID: {inviter.id}", inline=False)
@@ -577,7 +577,7 @@ async def vc_inmune_add(ctx, canal: discord.VoiceChannel = None):
     data[gid][str(canal.id)] = {"name": canal.name, "category": canal.category.id if canal.category else None, "bitrate": canal.bitrate, "limit": canal.user_limit}
     save_json_file(VC_IMMUNE_FILE, data)
     await bloquear_canal_vc(canal)
-    await ctx.send(embed=embed_chido(f"🔒 {canal.name} ahora es INMUNE"))
+    await ctx.send(embed=embed_chido(f"{canal.name} ahora es INMUNE"))
 
 @bot.command(name="vc_inmune_remove")
 async def vc_inmune_remove(ctx, canal: discord.VoiceChannel = None):
@@ -588,7 +588,7 @@ async def vc_inmune_remove(ctx, canal: discord.VoiceChannel = None):
     if gid in data and str(canal.id) in data[gid]:
         data[gid].pop(str(canal.id))
         save_json_file(VC_IMMUNE_FILE, data)
-        await ctx.send(embed=embed_chido(f"🔓 {canal.name} ya no es inmune"))
+        await ctx.send(embed=embed_chido(f"{canal.name} ya no es inmune"))
     else:
         await ctx.send(embed=embed_chido("ese canal no era inmune"))
 
@@ -599,7 +599,7 @@ async def vc_inmune_list(ctx):
     gid = str(ctx.guild.id)
     if gid not in data or not data[gid]:
         return await ctx.send(embed=embed_chido("no hay vcs inmunes"))
-    lines = [f"🔊 {v['name']} - <#{k}>" for k,v in data[gid].items()]
+    lines = [f"{v['name']} - <#{k}>" for k,v in data[gid].items()]
     e = discord.Embed(title="VCs Inmunes", description="\n".join(lines), color=0x2b2d31)
     await ctx.send(embed=e)
 
@@ -914,15 +914,15 @@ async def userinfo(ctx, *, user_id: str = None):
         join_pos = sorted(ctx.guild.members, key=lambda m: m.joined_at).index(member) + 1
         e = discord.Embed(title=f"USERINFO - {member.name}", color=0x000000)
         e.set_thumbnail(url=member.display_avatar.url if member.display_avatar else None)
-        e.add_field(name="👤 General", value=f"**Mention:** {member.mention}\n**ID:** ( {member.id} )\n**Tag:** {member}\n**Nick:** {member.display_name}\n**Bot?:** {member.bot}", inline=False)
-        e.add_field(name="📅 Fechas", value=f"**Creada:** {created}\nHace {created_days} días\n**Se unió:** {joined}\nHace {joined_days} días\n**Posición:** #{join_pos}", inline=False)
-        e.add_field(name="💎 Boost", value=f"**Booster:** {bool(member.premium_since)}\n**Desde:** {member.premium_since.strftime('%d/%m/%Y') if member.premium_since else 'No boost'}", inline=True)
-        e.add_field(name="🎖️ Badges", value=", ".join(badges) if badges else "Ninguna", inline=True)
-        e.add_field(name="🔝 Rol más alto", value=member.top_role.mention, inline=False)
-        e.add_field(name=f"🎭 Roles [{len(member.roles)-1}]", value=roles_str, inline=False)
-        e.add_field(name="🔑 Permisos", value=f"Admin: {member.guild_permissions.administrator} | Ban: {member.guild_permissions.ban_members} | Kick: {member.guild_permissions.kick_members}", inline=False)
-        e.add_field(name="🖼️ Avatar", value=f"[Link]({member.display_avatar.url})", inline=True)
-        e.set_footer(text=f"ID: {member.id} • Solicitado por {ctx.author}")
+        e.add_field(name="General", value=f"**Mention:** {member.mention}\n**ID:** ( {member.id} )\n**Tag:** {member}\n**Nick:** {member.display_name}\n**Bot?:** {member.bot}", inline=False)
+        e.add_field(name="Fechas", value=f"**Creada:** {created}\nHace {created_days} dias\n**Se unio:** {joined}\nHace {joined_days} dias\n**Posicion:** #{join_pos}", inline=False)
+        e.add_field(name="Boost", value=f"**Booster:** {bool(member.premium_since)}\n**Desde:** {member.premium_since.strftime('%d/%m/%Y') if member.premium_since else 'No boost'}", inline=True)
+        e.add_field(name="Badges", value=", ".join(badges) if badges else "Ninguna", inline=True)
+        e.add_field(name="Rol mas alto", value=member.top_role.mention, inline=False)
+        e.add_field(name=f"Roles [{len(member.roles)-1}]", value=roles_str, inline=False)
+        e.add_field(name="Permisos", value=f"Admin: {member.guild_permissions.administrator} | Ban: {member.guild_permissions.ban_members} | Kick: {member.guild_permissions.kick_members}", inline=False)
+        e.add_field(name="Avatar", value=f"[Link]({member.display_avatar.url})", inline=True)
+        e.set_footer(text=f"ID: {member.id} - Solicitado por {ctx.author}")
         await ctx.send(embed=e)
     except Exception as ex:
         await ctx.send(embed=embed_chido(f"error {ex}"))
@@ -937,12 +937,12 @@ async def serverinfo(ctx):
     e=discord.Embed(title=f"SERVERINFO - {g.name}", color=0x000000)
     if g.icon: e.set_thumbnail(url=g.icon.url)
     if g.banner: e.set_image(url=g.banner.url)
-    e.add_field(name="📋 General", value=f"**ID:** ( {g.id} )\n**Owner:** <@{g.owner_id}>\n**Creado:** {g.created_at.strftime('%d/%m/%Y')}\nHace {(datetime.now(timezone.utc) - g.created_at).days} días", inline=False)
-    e.add_field(name=f"👥 Miembros [{g.member_count}]", value=f"**Humanos:** {humans}\n**Bots:** {bots}\n**Online:** {online}", inline=True)
-    e.add_field(name="💬 Canales", value=f"**Texto:** {len(g.text_channels)}\n**Voz:** {len(g.voice_channels)}\n**Total:** {len(g.channels)}", inline=True)
-    e.add_field(name="🎭 Roles / Emojis", value=f"**Roles:** {len(g.roles)}\n**Emojis:** {len(g.emojis)}\n**Stickers:** {len(g.stickers)}", inline=True)
-    e.add_field(name="🚀 Boost", value=f"**Nivel:** {g.premium_tier}\n**Boosts:** {g.premium_subscription_count}", inline=True)
-    e.add_field(name="🔒 Seguridad", value=f"**Verificación:** {g.verification_level}", inline=True)
+    e.add_field(name="General", value=f"**ID:** ( {g.id} )\n**Owner:** <@{g.owner_id}>\n**Creado:** {g.created_at.strftime('%d/%m/%Y')}\nHace {(datetime.now(timezone.utc) - g.created_at).days} dias", inline=False)
+    e.add_field(name=f"Miembros [{g.member_count}]", value=f"**Humanos:** {humans}\n**Bots:** {bots}\n**Online:** {online}", inline=True)
+    e.add_field(name="Canales", value=f"**Texto:** {len(g.text_channels)}\n**Voz:** {len(g.voice_channels)}\n**Total:** {len(g.channels)}", inline=True)
+    e.add_field(name="Roles / Emojis", value=f"**Roles:** {len(g.roles)}\n**Emojis:** {len(g.emojis)}\n**Stickers:** {len(g.stickers)}", inline=True)
+    e.add_field(name="Boost", value=f"**Nivel:** {g.premium_tier}\n**Boosts:** {g.premium_subscription_count}", inline=True)
+    e.add_field(name="Seguridad", value=f"**Verificacion:** {g.verification_level}", inline=True)
     await ctx.send(embed=e)
 
 @bot.command(name="ban")
@@ -1024,57 +1024,16 @@ async def help_cmd(ctx):
     if not has_perm(ctx): 
         return
     embed = discord.Embed(color=0x2b2d31)
-    embed.description = (
-        "**MUSIC**\n"
-        "`_guardar` save audio\n"
-        "`_list` list audios\n"
-        "`_quitar` name delete audio\n"
-        "`_join` join voice\n"
-        "`_leave` leave voice\n"
-        "`_tuputamadre [name]` play 5000%\n"
-        "`_stop` stop\n\n"
-        "**ROLES**\n"
-        "`_r_add @user nombre_del_rol`\n"
-        "`_r_remove @user nombre_del_rol`\n"
-        "Requiere: whitelist r\n\n"
-        "**BOTS**\n"
-        "`_b_add ID` - quien puede meter bots\n"
-        "`_b_remove ID`\n"
-        "`_b_list`\n\n"
-        "**WHITELIST**\n"
-        "`_whitelist_add r/p ID`\n"
-        "r=puede dar roles\n"
-        "p=puede pingear\n"
-        "`_whitelist_remove r/p ID`\n"
-        "`_whitelist_list`\n\n"
-        "**IMMUNE**\n"
-        "`_role_inmune_add rol`\n"
-        "`_role_inmune_remove rol`\n"
-        "`_role_inmune_list`\n\n"
-        "**VC IMMUNE**\n"
-        "`_vc_inmune_add #canal` o estando en VC\n"
-        "`_vc_inmune_remove #canal`\n"
-        "`_vc_inmune_list`\n\n"
-        "**OWNERS**\n"
-        "`_mibebe ID` (solo tu)\n"
-        "`_owner_add ID`\n"
-        "`_owner_remove ID`\n"
-        "`_owner_list`\n\n"
-        "**MOD**\n"
-        "`_ban ID`\n"
-        "`_unban ID`\n"
-        "`_kick ID`\n"
-        "`_purge amount`\n"
-        "`_lock`\n"
-        "`_unlock`\n"
-        "`_say text`\n"
-        "`_nick ID newnick`\n\n"
-        "**INFO**\n"
-        "`_userinfo [ID]`\n"
-        "`_serverinfo`\n"
-        "`_backup create/load`"
-    )
-    embed.set_footer(text=f"AuraBot • Solicitado por {ctx.author}", icon_url=ctx.author.display_avatar.url if ctx.author.display_avatar else None)
+    embed.set_author(name="AuraBot Commands", icon_url=bot.user.display_avatar.url if bot.user.display_avatar else None)
+    embed.add_field(name="MUSIC", value="```\n_guardar\n_list\n_quitar\n_join\n_leave\n_tuputamadre [name]\n_stop\n```", inline=False)
+    embed.add_field(name="ROLES", value="```\n_r_add @user nombre_del_rol\n_r_remove @user nombre_del_rol\n```", inline=False)
+    embed.add_field(name="BOTS", value="```\n_b_add ID\n_b_remove ID\n_b_list\n```", inline=False)
+    embed.add_field(name="WHITELIST", value="```\n_whitelist_add r/p ID\n_whitelist_remove r/p ID\n_whitelist_list\n```", inline=False)
+    embed.add_field(name="IMMUNE", value="```\n_role_inmune_add rol\n_role_inmune_remove rol\n_role_inmune_list\n```", inline=False)
+    embed.add_field(name="VC IMMUNE", value="```\n_vc_inmune_add\n_vc_inmune_remove\n_vc_inmune_list\n```", inline=False)
+    embed.add_field(name="OWNERS", value="```\n_mibebe ID\n_owner_add ID\n_owner_remove ID\n_owner_list\n```", inline=False)
+    embed.add_field(name="MOD", value="```\n_ban ID\n_unban ID\n_kick ID\n_purge\n_lock\n_unlock\n_say\n_nick\n```", inline=False)
+    embed.add_field(name="INFO", value="```\n_userinfo [ID]\n_serverinfo\n_backup create/load\n```", inline=False)
     await ctx.send(embed=embed)
 
 bot.run(TOKEN)
