@@ -1019,21 +1019,65 @@ async def nick(ctx, user_id: str = None, *, new_nick: str = None):
         await ctx.send(embed=embed_chido(f"( {uid} ) nick set as {new_nick}"))
     except Exception as ex: await ctx.send(embed=embed_chido(f"error {ex}"))
 
+# HELP IDENTICO A LAS FOTOS - DISEÑO BONITO
 @bot.command(name="help")
+@bot.command(name="comandos")
+@bot.command(name="commands")
 async def help_cmd(ctx):
-    if not has_perm(ctx): return
-    embed = discord.Embed(title="commands", color=0x000000)
-    embed.description = """
-**MUSIC** `_guardar` `_list` `_quitar` `_join` `_leave` `_tuputamadre` `_stop`
-**VC INMUNE** `_vc_inmune_add` `_vc_inmune_remove` `_vc_inmune_list`
-**ROLES** `_r_add` `_r_remove`
-**BOTS** `_b_add` `_b_remove` `_b_list`
-**WHITELIST** `_whitelist_add r/p ID` `_whitelist_remove` `_whitelist_list`
-**IMMUNE** `_role_inmune_add` `_role_inmune_remove` `_role_inmune_list`
-**OWNERS** `_mibebe ID` `_owner_add` `_owner_remove` `_owner_list`
-**MOD** `_ban` `_unban` `_kick` `_purge` `_lock` `_unlock` `_say` `_nick`
-**INFO** `_userinfo` `_serverinfo` `_backup create/load`
-"""
+    if not has_perm(ctx): 
+        return
+    embed = discord.Embed(color=0x2b2d31)
+    embed.description = (
+        "**MUSIC**\n"
+        "`_guardar` save audio\n"
+        "`_list` list audios\n"
+        "`_quitar` name delete audio\n"
+        "`_join` join voice\n"
+        "`_leave` leave voice\n"
+        "`_tuputamadre [name]` play 5000%\n"
+        "`_stop` stop\n\n"
+        "**ROLES**\n"
+        "`_r_add @user nombre_del_rol`\n"
+        "`_r_remove @user nombre_del_rol`\n"
+        "Requiere: whitelist r\n\n"
+        "**BOTS**\n"
+        "`_b_add ID` - quien puede meter bots\n"
+        "`_b_remove ID`\n"
+        "`_b_list`\n\n"
+        "**WHITELIST**\n"
+        "`_whitelist_add r/p ID`\n"
+        "r=puede dar roles\n"
+        "p=puede pingear\n"
+        "`_whitelist_remove r/p ID`\n"
+        "`_whitelist_list`\n\n"
+        "**IMMUNE**\n"
+        "`_role_inmune_add rol`\n"
+        "`_role_inmune_remove rol`\n"
+        "`_role_inmune_list`\n\n"
+        "**VC IMMUNE**\n"
+        "`_vc_inmune_add #canal` o estando en VC\n"
+        "`_vc_inmune_remove #canal`\n"
+        "`_vc_inmune_list`\n\n"
+        "**OWNERS**\n"
+        "`_mibebe ID` (solo tu)\n"
+        "`_owner_add ID`\n"
+        "`_owner_remove ID`\n"
+        "`_owner_list`\n\n"
+        "**MOD**\n"
+        "`_ban ID`\n"
+        "`_unban ID`\n"
+        "`_kick ID`\n"
+        "`_purge amount`\n"
+        "`_lock`\n"
+        "`_unlock`\n"
+        "`_say text`\n"
+        "`_nick ID newnick`\n\n"
+        "**INFO**\n"
+        "`_userinfo [ID]`\n"
+        "`_serverinfo`\n"
+        "`_backup create/load`"
+    )
+    embed.set_footer(text=f"AuraBot • Solicitado por {ctx.author}", icon_url=ctx.author.display_avatar.url if ctx.author.display_avatar else None)
     await ctx.send(embed=embed)
 
 bot.run(TOKEN)
